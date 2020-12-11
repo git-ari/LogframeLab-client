@@ -1,5 +1,4 @@
 describe('Main Workflow without document', ()=> {
-  const BASE_URL = Cypress.config().baseUrl;
   beforeEach(()=> {
     sessionStorage.setItem('shownDialog', 'true');
 
@@ -15,10 +14,7 @@ describe('Main Workflow without document', ()=> {
   });
 
   it("should test workflow without document", () => {
-      // Hide extra layer of spin
-      cy.get('.ant-spin').invoke('attr', 'style', 'display:none !important');
-      cy.get('.ant-spin-blur').invoke('attr', 'class', 'ant-spin-container ng-star-inserted');
-
+      hideSpin();
       cy.contains('Filter by Sector').click();
       cy.contains('Poverty').click();
       cy.get('#nextButton').click({ force: true }).then(()=> {
@@ -65,10 +61,52 @@ describe('Main Workflow without document', ()=> {
         
         // Indicators Tab
         cy.get('#nextButton').click({ force: true }).then(()=> {
-          
+          cy.get('.propertiesCell').eq(0).click();
+
+          // Add baseline value
+          cy.get('#baselineInput').type('Baseline value', {force:true}).should('have.value', 'Baseline value');
+          cy.get('.ant-table-content > table > .ant-table-tbody > .ant-table-row > .ant-table-selection-column').click({force:true});
+          // cy.get(':nth-child(4) > .ant-picker > [nz-picker=""] > .ant-picker-input > .ng-pristine').type('2020', {force: true}).should('have.value', '2020');
+
+          cy.contains('OK').click({force: true});
+          // Select another row
+          cy.get(':nth-child(4) > .ant-table-selection-column').click();
+          // Visualisation Tab
+          cy.get('#nextButton').click({ force: true }).then(()=> {
+            cy.contains('Proceed').click();
+            // cy.wait(5000);
+            // cy.wrap('.draw2d_OutputPort').trigger("dragstart");
+            // cy.get('[cy="40"]').trigger("drop");
+            // Download Tab
+            cy.get('#nextButton').click({ force: true }).then(()=> {
+              cy.contains('Proceed').click();
+              cy.contains('Download Indicators Word (EU format)');
+              cy.contains('Download Indicators Word (PRM format)');
+              cy.contains('Download Indicators Excel');
+              cy.contains('Download Indicators Excel (DFID format)');
+              cy.contains('Download Statements PNG');
+              cy.get('#nextButton').should('not.be.visible');
+              cy.contains('Previous').should('be.visible');
+              cy.contains('Done').should('be.visible');
+              cy.contains('Done').click();
+              // Selection Tab
+              hideSpin();
+              cy.get('.ant-upload-text');
+              cy.contains('Poverty').should('not.exist');
+              cy.get('#nextButton').should('be.visible');
+              cy.contains('Previous').should('not.be.visible');
+            });
+          });
         });
+        
       });
   });
+
+  function hideSpin(): void {
+    // Hide extra layer of spin
+    cy.get('.ant-spin').invoke('attr', 'style', 'display:none !important');
+    cy.get('.ant-spin-blur').invoke('attr', 'class', 'ant-spin-container ng-star-inserted');
+  }
 
   function addStatement(index: number, statement: string, level: string, score: number, status: string): void {
     // Add new statement

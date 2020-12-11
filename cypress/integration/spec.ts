@@ -52,20 +52,32 @@ describe('Home Page', ()=> {
     cy.contains('Logframe Lab ©'+new Date().getFullYear()+' developed by Arqaam GmbH');
   });
 
-  it("should go to the results tab without document", () => {
-    cy.get('.ant-modal-close-x').click();
-    cy.contains('Filter by Sector').click({force: true});
-    cy.contains('Poverty').click();
-    cy.get('#nextButton').click({ force: true }).then(()=> {
-      cy.contains('Level');
-      cy.contains('Result Statement');
-      cy.contains('Status');
-      cy.contains('Score');
-      cy.contains('Action');
-      cy.get('#nextButton').should('be.visible');
-      cy.contains('Done').should('not.be.visible');
-    });
-  });
+  it("should test workflow with document", () => {
+    hideSpin();
+    const fixtureName = 'test_upload.docx';
+    const fileType = '';
+    let selector = cy.get('input[type="file"]');
+    // let selector = cy.get('[data-cy="uploadDocument"]');
+    
+    cy.fixture('test_upload.docx').as(fixtureName);
+    // cy.get('.uploadText').attachFile(fixtureName);
+    // cy.attachFile(fixtureName);
+    // cy.uploadFile(selector, fixtureName, '');
+    // cy.upload_file(fixtureName, '', selector);
+    // cy.fixture(fixtureName, 'hex').then((fileHex) => {
+
+    //     const fileBytes = hexStringToByte(fileHex);
+    //     const testFile = new File([fileBytes], fixtureName, {
+    //         type: fileType
+    //     });
+    //     const dataTransfer = new DataTransfer()
+    //     const el = selector[0]
+        
+    //     dataTransfer.items.add(testFile)
+    //     el.files = dataTransfer.files
+    // })
+
+});
 
   it('should display help', ()=> {
       cy.get('.ant-modal-close-x').click();
@@ -86,4 +98,23 @@ describe('Home Page', ()=> {
     cy.get('#uploadButton').click();
     cy.url().should('equal', BASE_URL+ 'indicators-upload');
   });
+
+  function hideSpin(): void {
+    // Hide extra layer of spin
+    cy.get('.ant-spin').invoke('attr', 'style', 'display:none !important');
+    cy.get('.ant-spin-blur').invoke('attr', 'class', 'ant-spin-container ng-star-inserted');
+  }
+
+  function hexStringToByte(str) {
+    if (!str) {
+        return new Uint8Array();
+    }
+
+    var a = [];
+    for (var i = 0, len = str.length; i < len; i += 2) {
+        a.push(parseInt(str.substr(i, 2), 16));
+    }
+
+    return new Uint8Array(a);
+}
 });

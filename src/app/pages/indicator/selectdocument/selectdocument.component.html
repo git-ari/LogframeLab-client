@@ -78,6 +78,7 @@
   [nzBeforeUpload]="beforeUpload"
   [nzShowUploadList]="true"
   *ngIf="progress==0"
+  data-cy="uploadDocument"
 >
   <div class="uploadText" *ngIf='progress==0'>
     <i class = "uploadIcon" nz-icon nzType="folder" nzTheme="outline"></i>

@@ -22,10 +22,10 @@ describe('Submit indicators Page', ()=> {
         cy.get('.closeHelpIcon').should('not.exist');
     });
     
-    /*it('should go to the feedback page', ()=> {
+    it('should go to the feedback page', ()=> {
         cy.get('#feedbackButton').should('be.visible');
-        cy.get('#feedbackButton').should('have.prop', 'href', 'https://feedback.logframelab.ai');
-    });*/
+        cy.get('#feedbackButton').parent().should('have.prop', 'href', 'https://feedback.logframelab.ai/');
+    });
 
     // it('should download template', () => {
     //     cy.route('**/indicator/template/xlsx', Cypress.Blob());

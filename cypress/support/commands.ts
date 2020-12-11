@@ -23,7 +23,8 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
-  
+import 'cypress-file-upload';
+
 Cypress.Commands.add("getBySel", (selector, ...args) => {
   // return cy.get(`[data-test=${selector}]`, ...args);
   return cy.get(`[data-cy=${selector}]`, ...args);
@@ -36,7 +37,8 @@ Cypress.Commands.add("getBySelLike", (selector, ...args) => {
 declare global {
   namespace Cypress {
     interface Chainable {
-       // attach_file: typeof attach_file;
+      // attachFile: typeof attachFile;
+        attach_file: typeof attach_file;
         uploadFile: typeof uploadFile;
         upload_file: typeof upload_file;
     }

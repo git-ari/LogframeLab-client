@@ -23,7 +23,8 @@ describe('Approve indicators Page', ()=> {
 
         cy.fixture('indicatorResponse/poverty.json').as('indicator');
         cy.route('**/ml/similarity**', '@indicator');
-
+        cy.fixture('approval-indicators.json').as('approvalIndicators');
+        cy.route('**/indicators/approvals?page=1&pageSize=50&filters.indicatorName=', '@approvalIndicators');
         cy.contains('Login').click();
         cy.visit('/manage-indicators/approve-uploaded');
         cy.wait('@filtersRoute');
